@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { BookingService } from 'src/app/Services/booking.service';
 import { AuthService } from 'src/app/Services/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { ShowFormAction } from 'src/app/State/Actions/sampleActions';
 
 @Component({
   selector: 'app-booking',
@@ -15,7 +17,8 @@ import { Router, RouterModule } from '@angular/router';
 export class BookingComponent implements OnInit {
   show=false
   form!:FormGroup
-  constructor(private fb:FormBuilder, public bookingService:BookingService, public auth:AuthService, private router:Router){
+  constructor(private fb:FormBuilder, public bookingService:BookingService,
+     public auth:AuthService, private router:Router, private store:Store<any>){
 
   }
   ngOnInit(): void {
@@ -24,6 +27,11 @@ export class BookingComponent implements OnInit {
       TravelDate:[null, Validators.required]
     })
     this.bookingService.getUserBooking()
+
+    this.store.select('sample').subscribe(state=>{
+      // console.log(state);
+      this.show= state.showForm
+    })
   }
 
   submitForm(){
@@ -33,7 +41,8 @@ export class BookingComponent implements OnInit {
     })
   }
   showForm(){
-  this.show=!this.show
+  // this.show=!this.show
+    this.store.dispatch(ShowFormAction())
   }
   ShowMore(){
   this.router.navigate(['/book'])
