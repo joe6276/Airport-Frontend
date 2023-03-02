@@ -39,7 +39,7 @@
                 <th>TravelDate</th>
                 <th>Actions</th>
               </tr>
-              <tr *ngFor="let booking of bookingService.booking$ |async" [routerLink]="['/book',booking.Id]" >
+              <tr *ngFor="let booking of booking$ |async" [routerLink]="['/book',booking.Id]" >
                 <td>{{booking.Name}}</td>
                 <td>{{booking.Destination}}</td>
                 <td>{{booking.TravelDate|date}}</td>
