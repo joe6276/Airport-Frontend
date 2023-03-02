@@ -6,6 +6,10 @@ import { AuthService } from 'src/app/Services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ShowFormAction } from 'src/app/State/Actions/sampleActions';
+import { addbooking, getBookings } from 'src/app/State/Actions/bookingActions';
+import { Observable } from 'rxjs';
+import { Booking } from 'src/app/Interfaces';
+import { myBookings } from 'src/app/State/Reducers/bookingReducer';
 
 @Component({
   selector: 'app-booking',
@@ -17,17 +21,16 @@ import { ShowFormAction } from 'src/app/State/Actions/sampleActions';
 export class BookingComponent implements OnInit {
   show=false
   form!:FormGroup
-  constructor(private fb:FormBuilder, public bookingService:BookingService,
-     public auth:AuthService, private router:Router, private store:Store<any>){
-
-  }
+  booking$!:Observable<Booking[]>
+  constructor(private fb:FormBuilder,public auth:AuthService, private router:Router, private store:Store<any>){}
   ngOnInit(): void {
     this.form = this.fb.group({
       Destination:[null, [Validators.required, Validators.email]],
       TravelDate:[null, Validators.required]
     })
-    this.bookingService.getUserBooking()
-
+    // this.bookingService.getUserBooking()
+    this.booking$=this.store.select(myBookings)
+    this.store.dispatch(getBookings())
     this.store.select('sample').subscribe(state=>{
       // console.log(state);
       this.show= state.showForm
@@ -35,10 +38,9 @@ export class BookingComponent implements OnInit {
   }
 
   submitForm(){
-    this.bookingService.addBooking(this.form.value).subscribe(res=>{
-      console.log(res);
-      this.bookingService.getUserBooking()      
-    })
+      this.store.dispatch(addbooking({newbooking:this.form.value}))
+      this.store.dispatch(getBookings())   
+    
   }
   showForm(){
   // this.show=!this.show

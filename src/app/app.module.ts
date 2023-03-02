@@ -8,6 +8,9 @@ import { StoreModule } from '@ngrx/store';
 import { sampleReducer } from './State/Reducers/sample';
 import { CounterReducer } from './State/Reducers/counterReducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { bookingReducer } from './State/Reducers/bookingReducer';
+import { BookingsEffect } from './State/Effects/BookingEffects';
 
 
 
@@ -19,8 +22,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot({sample:sampleReducer, counter:CounterReducer}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    StoreModule.forRoot({sample:sampleReducer, counter:CounterReducer, booking:bookingReducer}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([BookingsEffect])
   ],
   providers: [{provide:HTTP_INTERCEPTORS, useClass:TokenInterceptorService, multi:true}],
   bootstrap: [AppComponent]

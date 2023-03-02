@@ -4,16 +4,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthenticationService } from 'src/app/Services/authentication.service';
 import { AuthService } from 'src/app/Services/auth.service';
 import { Router } from '@angular/router';
+import { ErrorComponent } from 'src/app/error/error.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule,ErrorComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   form!:FormGroup
+  error=null
   constructor(private fb:FormBuilder, private authentication:AuthenticationService, private auth :AuthService,
     private router:Router
     ){
@@ -35,6 +37,12 @@ export class LoginComponent implements OnInit {
       if(response.token){
         this.router.navigate(['book'])
       }
+    },(error)=>{
+    this.error=error.error
     })
+  }
+
+  Close(){
+    this.error=null
   }
 }

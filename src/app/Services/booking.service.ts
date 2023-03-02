@@ -15,10 +15,8 @@ export class BookingService {
     return this.http.post<Message>('http://localhost:4000/flights',booking)
   }
   
-  getUserBooking(){
-    this.http.get<Booking[]>('http://localhost:4000/flights/booking/emails').subscribe(response=>{
-      this.booking$.next(response)
-    })
+  getUserBooking():Observable<Booking[]>{
+    return this.http.get<Booking[]>('http://localhost:4000/flights/booking/emails');
   }
 
   getOneBooking(id:string):Observable<Booking>{
@@ -29,8 +27,8 @@ export class BookingService {
     return  this.http.delete<Message>(`http://localhost:4000/flights/${id}`)
    }
 
-   updateBooking(id:string,updatedBooking:AddBooking):Observable<Message>{
-    return  this.http.put<Message>(`http://localhost:4000/flights/${id}`, updatedBooking)
+   updateBooking(id:string,updatedBooking:AddBooking):Observable<Booking>{
+    return  this.http.put<Booking>(`http://localhost:4000/flights/${id}`, updatedBooking)
    }
  
  
